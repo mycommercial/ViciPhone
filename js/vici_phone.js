@@ -128,10 +128,9 @@ dtmfHashAudio = new Audio('sounds/hash.wav');
 dtmfStarAudio = new Audio('sounds/star.wav');
 
 // adjust the dtmf tone volume
-dtmf0Audio.volume = dtmf1Audio.volume = dtmf2Audio.volume =
-dtmf4Audio.volume = dtmf5Audio.volume = dtmf6Audio.volume =
-dtmf7Audio.volume = dtmf8Audio.volume = dtmf9Audio.volume =
-dtmfHashAudio.volume = dtmfStarAudio.volume = 0.15
+dtmf0Audio.volume = dtmf1Audio.volume = dtmf2Audio.volume = dtmf3Audio.volume =
+dtmf4Audio.volume = dtmf5Audio.volume = dtmf6Audio.volume = dtmf7Audio.volume =
+dtmf8Audio.volume = dtmf9Audio.volume = dtmfHashAudio.volume = dtmfStarAudio.volume = 0.15
 
 processDisplaySettings();
 
@@ -548,6 +547,7 @@ function handleInvite( my_session ) {
 			setRinging(true);
 		}
 	}
+	return my_session;
 }
 
 function handleTrackAdded( my_session ) {
@@ -770,7 +770,7 @@ function initialize() {
 	});
 
 	ua.on('invite', (session) => {
-		handleInvite(session);
+		my_session = handleInvite(session);
 	});
 
 };
