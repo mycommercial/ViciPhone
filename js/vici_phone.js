@@ -79,7 +79,7 @@ var mediaStream;
 var mediaConstraints;
 
 var ua_config = {
-	userAgentString: 'VICIphone 2.0.1',
+	userAgentString: 'VICIphone 2.1',
 	displayName: cid_name,
 	uri: sip_uri,
 	hackIpInContact: true,
