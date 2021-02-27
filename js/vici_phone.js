@@ -79,7 +79,7 @@ var mediaStream;
 var mediaConstraints;
 
 var ua_config = {
-	userAgentString: 'VICIphone 2.0',
+	userAgentString: 'VICIphone 2.0.1',
 	displayName: cid_name,
 	uri: sip_uri,
 	hackIpInContact: true,
@@ -94,9 +94,11 @@ var ua_config = {
 	transportOptions: {
 		traceSip: true,
 		wsServers: ws_server,
-		userAgentString: 'VICIphone 2.0',
 	},
 	autostart: true,
+	registerOptions: {
+		expires: 900
+	}
 }
 
 // We define initial status
@@ -272,6 +274,7 @@ function dialButton() {
 	// check if in a call
 	if ( incall ) {
 		// we are so they hung up the call
+		setRinging(false);
 		debug_out( 'Hangup Button Pressed' );
 		setCallButtonStatus(false);
 		hangupCall();
@@ -414,7 +417,6 @@ function hangupCall() {
 	}
 
 	my_session.terminate();
-	my_session = false;
 	incall = false;
 	ringAudio.pause();
 	ringAudio.currentTime = 0;
@@ -448,6 +450,7 @@ function dialNumber() {
 		}
 	};
 	my_session = ua.invite( uri, options, modifierArray);
+
 	incall = true;
 
 	setRegisterStatus(get_translation('attempting') + ' - ' + uiElements.digits.value);
@@ -583,55 +586,8 @@ function handleBye( request ) {
 		setRegisterStatus( 'unregistered' );
 	}
 	setCallButtonStatus(false);
-	my_session = false;
+	my_session.terminate();
 	incall = false;
-}
-
-
-
-function handleFailed( response, cause ) {
-	debug_out( 'Session Failed Event Fired | ' + response + ' | ' + cause );
-	if ( cause == 'Canceled' ) {
-		// stop ringing
-		ringing = false;
-		stopBlink();
-		ringAudio.pause();
-		ringAudio.currentTime = 0;
-		// check if we are registered and adjust the display accordingly
-		if ( ua.isRegistered() ) {
-			uiElements.reg_status.value = 'Registered';
-			uiElements.reg_icon.src = 'images/wp_register_active.gif';
-			uiElements.unreg_icon.src = 'images/wp_unregister_inactive.gif';
-		} else {
-			uiElements.reg_status.value = 'Unregistered';
-			uiElements.reg_icon.src = 'images/wp_register_inactive.gif';
-			uiElements.unreg_icon.src = 'images/wp_unregister_active.gif';
-		}
-		my_session = false;
-		return;
-	}
-	if (( cause == 'WebRTC Error' ) || ( cause == 'WebRTC not supported') || ( cause == 'WebRTC not supported' )) {
-		// stop ringing
-		ringing = false;
-		ringAudio.pause();
-		ringAudio.currentTime = 0;
-		// check if we are registered and adjust the display accordingly
-		if ( ua.isRegistered() ) {
-			uiElements.reg_status.value = 'Registered';
-			uiElements.reg_icon.src = 'images/wp_register_active.gif';
-			uiElements.unreg_icon.src = 'images/wp_unregister_inactive.gif';
-		} else {
-			uiElements.reg_status.value = 'Unregistered';
-			uiElements.reg_icon.src = 'images/wp_register_inactive.gif';
-			uiElements.unreg_icon.src = 'images/wp_unregister_active.gif';
-		}
-		my_session = false;
-
-		WebRTCError();
-
-		return;
-	}
-	return;
 }
 
 
@@ -645,37 +601,50 @@ function handleFailed( response, cause ) {
 		} else {
 			setRegisterStatus( 'unregistered' );
 		}
-		my_session = false;
-		setCallButtonStatus(false);
-		my_session = false;
-		incall = false;
 		if (( cause == 'WebRTC Error' ) || ( cause == 'WebRTC not supported')) {
 			WebRTCError();
 		}
 	}
+	if ( ua.isRegistered() ) {
+		setRegisterStatus( 'registered' );
+	} else {
+		setRegisterStatus( 'unregistered' );
+	}
+	setRinging(false);
+	setCallButtonStatus(false);
+	incall = false;
+	my_session.terminate();
 }
 
 
 
 function setRegisterStatus( message ) {
+	// Default condition
+	translated_message = message;
+
 	if ( (message == 'registered') || (message == 'connected') ) {
 		uiElements.reg_icon.src = 'images/wp_register_active.gif';
 		uiElements.unreg_icon.src = 'images/wp_unregister_inactive.gif';
 		translated_message = get_translation(message)
+		if ( incall )
+			debug_out("Re-registration ocurred while in a call. Not changing anything.")
+		else
+			debug_out("Registration successful.")
+
 	}
 	else if ( (message == 'unregistered') || (message == 'disconnected') || (message == 'register_failed') ) {
 		uiElements.reg_icon.src = 'images/wp_register_inactive.gif';
 		uiElements.unreg_icon.src = 'images/wp_unregister_active.gif';
 		translated_message = get_translation(message)
 	}
-	else {
-		translated_message = message;
-	}
 
-	if (uiElements.reg_status.type == 'text')
-		uiElements.reg_status.value = translated_message;
-	else
-		uiElements.reg_status.innerHTML = translated_message;
+	// Change the dialbox content only if we are not in a call. Otherwise, leave it as is
+	if ( !incall ) {
+		if (uiElements.reg_status.type == 'text')
+			uiElements.reg_status.value = translated_message;
+		else
+			uiElements.reg_status.innerHTML = translated_message;
+	}
 }
 
 
@@ -747,8 +716,9 @@ function initialize() {
 			dialButton();
 		}
 
-		//added By ViciExperts to automatically login agent as soon as the webphone is loaded.
-		if ( auto_login ) {
+		// Added By ViciExperts to automatically login agent as soon as the webphone is loaded.
+		// Only log agent if not in a call already
+		if ( (!incall) && (auto_login)) {
 			try {
 				parent.NoneInSessionCalL('LOGIN');
 			}
