@@ -433,3 +433,5 @@
 	right: -98px;
 	height: 24px;
 }
+/* Always hide alpha characters in this template */
+button div.alpha { display: none }

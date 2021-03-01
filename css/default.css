@@ -428,3 +428,10 @@
 	top: -4px;
 	right: -123px;
 }
+
+button div.alpha { 
+	/* Comment following line to display alpha characters inside DTMF buttons */
+	display: none;
+	
+	font-size: 11px ;
+}

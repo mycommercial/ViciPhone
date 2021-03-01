@@ -64,19 +64,19 @@
 				<!-- Dialpad -->
 				<section id="dialpad" hidden>
 					<section id="dial_row1">
-						<button class="dialpad_button" id="one">1</button>
-						<button class="dialpad_button" id="two">2</button>
-						<button class="dialpad_button" id="three">3</button>
+						<button class="dialpad_button" id="one">1<div class='alpha'></div></button>
+						<button class="dialpad_button" id="two">2<div class='alpha'>abc</div></button>
+						<button class="dialpad_button" id="three">3<div class='alpha'>def</div></button>
 					</section>
 					<section id="dial_row2">
-						<button class="dialpad_button" id="four">4</button>
-						<button class="dialpad_button" id="five">5</button>
-						<button class="dialpad_button" id="six">6</button>
+						<button class="dialpad_button" id="four">4<div class='alpha'>ghi</div></button>
+						<button class="dialpad_button" id="five">5<div class='alpha'>jkl</div></button>
+						<button class="dialpad_button" id="six">6<div class='alpha'>mno</div></button>
 					</section>
 					<section id="dial_row3">
-						<button class="dialpad_button" id="seven">7</button>
-						<button class="dialpad_button" id="eight">8</button>
-						<button class="dialpad_button" id="nine">9</button>
+						<button class="dialpad_button" id="seven">7<div class='alpha'>pqrs</div></button>
+						<button class="dialpad_button" id="eight">8<div class='alpha'>tuv</div></button>
+						<button class="dialpad_button" id="nine">9<div class='alpha'>wxyz</div></button>
 					</section>
 					<section id="dial_row4">
 						<button class="dialpad_button" id="star">*</button>
