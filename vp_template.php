@@ -25,14 +25,13 @@
 	<head>
 		<title>Vicidial Web Phone</title>
 		<link rel="stylesheet" href="<?php echo $layout; ?>" />
-		<meta http-equiv="Pragma" content="no-cache">
-		<meta http-equiv="Expires" content="-1″>
-		<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 	</head>
 	<body>
 		<!-- Container -->
 		<div id="container">
-
 			<!-- Main -->
 			<div id="main">
 				<!-- Video element to handle audio -->
@@ -47,38 +46,37 @@
 				<!-- Controls -->
 				<section id="controls">
 					<section id="registration_control">
-						<input type="text" value="" id="reg_status" readonly>
-						<button class="button" id="register"><img id="reg_icon" src="images/wp_register_inactive.gif" alt="register"></button>
-						<button class="button" id="unregister"><img id="unreg_icon" src="images/wp_unregister_inactive.gif" alt="register"></button>
+						<input type="text" value="" id="reg_status" readonly />
+						<button class="button" id="register"><img id="reg_icon" src="images/wp_unregister_inactive.gif" alt="register"></button>
 					</section>
 					<section id="dial_control">
-						<input type="text" name="digits" value="<?php echo $dial_number?>" id="digits"/>
-						<button class="button" id="dial"><img id="dial_icon" src="images/wp_dial.gif" alt="register"></button>
+						<input type="text" name="digits" value="<?php echo $dial_number?>" id="digits" hidden />
+						<button class="button" id="dial"><img id="dial_icon" src="images/wp_dial.gif" alt="dial button"></button>
 					</section>
-					<section id="audio_control">
-						<button class="button" id="mic_mute"><img id="mute_icon" src="images/wp_mic_on.gif" alt="mute"></button>
-						<button class="button" id="vol_up"><img id="vol_up_icon" src="images/wp_speaker_up.gif" alt="register"></button>
-						<button class="button" id="vol_down"><img id="vol_down_icon" src="images/wp_speaker_down.gif" alt="register"></button>
+					<section id="audio_control" >
+						<button class="button" hidden id="mic_mute"><img id="mute_icon" src="images/wp_mic_on.gif" alt="mute" /></button>
+						<button class="button" hidden id="vol_up"><img id="vol_up_icon" src="images/wp_speaker_up.gif" alt="speaker up" /></button>
+						<button class="button" hidden id="vol_down"><img id="vol_down_icon" src="images/wp_speaker_down.gif" alt="speaker down" /></button>
 					</section>
 				</section>
 				<!-- End Controls -->
 
 				<!-- Dialpad -->
-				<section id="dialpad">
+				<section id="dialpad" hidden>
 					<section id="dial_row1">
-						<button class="dialpad_button" id="one">1</button>
-						<button class="dialpad_button" id="two">2</button>
-						<button class="dialpad_button" id="three">3</button>
+						<button class="dialpad_button" id="one">1<div class='alpha'></div></button>
+						<button class="dialpad_button" id="two">2<div class='alpha'>abc</div></button>
+						<button class="dialpad_button" id="three">3<div class='alpha'>def</div></button>
 					</section>
 					<section id="dial_row2">
-						<button class="dialpad_button" id="four">4</button>
-						<button class="dialpad_button" id="five">5</button>
-						<button class="dialpad_button" id="six">6</button>
+						<button class="dialpad_button" id="four">4<div class='alpha'>ghi</div></button>
+						<button class="dialpad_button" id="five">5<div class='alpha'>jkl</div></button>
+						<button class="dialpad_button" id="six">6<div class='alpha'>mno</div></button>
 					</section>
 					<section id="dial_row3">
-						<button class="dialpad_button" id="seven">7</button>
-						<button class="dialpad_button" id="eight">8</button>
-						<button class="dialpad_button" id="nine">9</button>
+						<button class="dialpad_button" id="seven">7<div class='alpha'>pqrs</div></button>
+						<button class="dialpad_button" id="eight">8<div class='alpha'>tuv</div></button>
+						<button class="dialpad_button" id="nine">9<div class='alpha'>wxyz</div></button>
 					</section>
 					<section id="dial_row4">
 						<button class="dialpad_button" id="star">*</button>
@@ -134,7 +132,7 @@
 		<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 
 		<!-- SIP.js library, included from CDN. If you need it offline, uncomment the next line -->
-		<script src="https://cdn.jsdelivr.net/npm/sip.js@0.15.11/dist/sip-0.15.11.min.js"></script-->
+		<script src="https://cdn.jsdelivr.net/npm/sip.js@0.15.11/dist/sip-0.15.11.min.js"></script>
 
 		<!-- SIP.js library offline version-->
 		<!--script src="js/sip-0.15.11.min.js"></script-->
@@ -143,7 +141,7 @@
 		<script src="js/translations.js"></script>
 
 		<!-- Our Java Script Code -->
-		<script src="js/vici_phone.js"></script>
+		<script src="js/vici_phone.js?v=2.1"></script>
 
 	</body>
 </html>
