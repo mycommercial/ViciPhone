@@ -141,7 +141,7 @@
 		<script src="js/translations.js"></script>
 
 		<!-- Our Java Script Code -->
-		<script src="js/vici_phone.js?v=2.1"></script>
+		<script src="js/vici_phone.js?v=2.1.1"></script>
 
 	</body>
 </html>

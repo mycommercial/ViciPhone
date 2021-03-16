@@ -5,7 +5,7 @@
 *
 *	Copyright (C) 2016  Michael Cargile
 *	Updated by Christian Cabrera
-*	Version 2.1.0
+*	Version 2.1.1
 *
 *	This program is free software: you can redistribute it and/or modify
 *	it under the terms of the GNU Affero General Public License as
@@ -500,7 +500,7 @@ function handleProgress( progress ) {
 
 
 
-function handleInvite( my_session ) {
+function handleInvite( session ) {
 
 	// check if we are in a call already
 	if ( incall ) {
@@ -510,21 +510,23 @@ function handleInvite( my_session ) {
 			statusCode: 486,
 			reasonPhrase: "Busy Here"
 		};
-		my_session.reject(options);
-		return false;
+		session.reject(options);
+
+		// We return a previously created session so everything stays the same
+		return my_session;
 	}
 
 	// we are not in a call
 
 	// add session event listeners
-	my_session.on('accepted', function() { handleAccepted() } );
-	my_session.on('bye', function( request ) { handleBye( request ) } );
-	my_session.on('failed', function( response, cause ) { handleFailed( response, cause ) } );
-	my_session.on('refer', function() { handleInboundRefer() } );
-	my_session.on('trackAdded', function() { handleTrackAdded( my_session ) } );
+	session.on('accepted', function() { handleAccepted() } );
+	session.on('bye', function( request ) { handleBye( request ) } );
+	session.on('failed', function( response, cause ) { handleFailed( response, cause ) } );
+	session.on('refer', function() { handleInboundRefer() } );
+	session.on('trackAdded', function() { handleTrackAdded( session ) } );
 
-	var remoteUri = my_session.remoteIdentity.uri.toString();
-	var displayName = my_session.remoteIdentity.displayName;
+	var remoteUri = session.remoteIdentity.uri.toString();
+	var displayName = session.remoteIdentity.displayName;
 	var regEx1 = /sip:/;
 	var regEx2 = /@.*$/;
 	var extension = remoteUri.replace( regEx1 , '' );
@@ -552,14 +554,14 @@ function handleInvite( my_session ) {
 			}
 		};
 
-		my_session.accept(options,modifierArray);
+		session.accept(options,modifierArray);
 		setCallButtonStatus(true);
 	} else {
 		// auto answer not enabled
 		// ring the phone
 		setRinging(true);
 	}
-	return my_session;
+	return session;
 }
 
 
